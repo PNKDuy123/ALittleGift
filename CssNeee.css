@@ -1,0 +1,683 @@
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            /* 🌸 Màu chủ đạo của phong bì & tim */
+            --color-env: #f9b6c9;
+            /* Hồng pastel nhẹ cho thân phong bì */
+            --color-env2: #f28ca7;
+            /* Hồng đậm hơn cho nắp phong bì */
+            --color-flap: #f493ad;
+            /* Nắp thư chuyển sắc */
+            --color-heart: #ff6b81;
+            /* Tim đỏ hồng rực */
+
+            /* 🌼 Nền và không gian */
+            --color-bg: #fff0f3;
+            /* Nền sáng dịu, không quá trắng */
+            --color-shadow: rgba(0, 0, 0, 0.1);
+            /* Đổ bóng nhẹ */
+            --color-glow: rgba(255, 182, 193, 0.6);
+            /* Ánh sáng hồng mờ */
+
+            /* ✉️ Kích thước phong bì */
+            --env-width: 280px;
+            --env-height: 220px;
+            --env-border-radius: 8px;
+
+            /* 💖 Tim */
+            --heart-width: 50px;
+
+            /* ✨ Animation speed */
+            --anim-speed: 1.2s;
+        }
+
+
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 25%, #ffd4e8 50%, #ffe0f0 75%, #ffeef8 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .bg-animation {
+            position: fixed;
+            /* Cố định vị trí */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* Không chặn click chuột */
+            z-index: 0;
+            /* Nằm phía sau phong bì */
+            overflow: hidden;
+            /* Ẩn phần thừa ra ngoài */
+        }
+
+        .falling-petal {
+            position: absolute;
+            top: -50px;
+            /* Bắt đầu từ trên cùng, ngoài màn hình */
+            font-size: 2rem;
+            /* Kích thước hoa 2rem */
+            opacity: 0.8;
+            /* Trong suốt 80% */
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotateZ(0deg);
+            }
+
+            100% {
+                transform: translateY(100vh) rotateZ(360deg);
+            }
+        }
+
+        .light-bubble {
+            position: absolute;
+            border-radius: 50%;
+            /* Hình tròn */
+            background: radial-gradient(circle, rgba(255, 182, 193, 0.6), transparent);
+            animation: float-up linear infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.3;
+                /* Mờ dần ở giữa */
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1.5);
+                /* Bay lên và to ra */
+                opacity: 0;
+            }
+        }
+
+        .rotating-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 105, 180, 0.2);
+            /* Viền hồng trong suốt */
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+                /* Xoay 1 vòng */
+            }
+        }
+
+        .twinkle-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 182, 193, 0.8);
+            /* Ánh sáng hồng */
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .light-wave {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 182, 193, 0.3), transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                /* Phình to */
+                opacity: 0.2;
+                /* Mờ đi */
+            }
+        }
+
+
+        .envelope-wrapper {
+            height: calc(var(--env-height) + 200px);
+        }
+
+        #envelope {
+            position: relative;
+            overflow: visible;
+            width: var(--env-width);
+            height: var(--env-height);
+            border-bottom-left-radius: var(--env-border-radius);
+            border-bottom-right-radius: var(--env-border-radius);
+            margin-left: auto;
+            margin-right: auto;
+            top: 250px;
+            background-color: var(--color-flap);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            animation: tran 3s infinite;
+        }
+
+        @keyframes tran {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(20px);
+
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+
+        .letter {
+            position: relative;
+            background-color: #fff;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            max-height: calc(var(--env-height) * 0.9);
+            height: 90%;
+            top: 10%;
+            border-radius: var(--env-border-radius);
+            box-shadow: 0 2px 26px rgba(0, 0, 0, 0.12);
+            transition: transform 0.4s ease;
+            padding: 10px 12px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        /* Phần trang trí đầu thư */
+        .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to right, #ff9ff3, #feca57, #ff9ff3);
+            opacity: 0.3;
+        }
+
+        .letter.full {
+            position: absolute;
+            width: 90vw;
+            max-width: 400px;
+            height: 85vh;
+            max-height: 600px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 100;
+            border-radius: 10px;
+            border: 2px solid #ff9ff3;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+
+        }
+
+        .letter-content {
+            padding: 50px 20px 30px;
+            opacity: 0;
+            pointer-events: none;
+            text-align: center;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .letter.full .letter-content {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .letter-content h1 {
+            color: #e84393;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .letter-content p {
+            color: #2d3436;
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .signature {
+            margin-top: 30px;
+            font-style: italic;
+            color: #d63031;
+            font-size: 1.1rem;
+        }
+
+
+        /* Hiệu ứng hoa và trái tim */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 2rem;
+        }
+
+        .flower {
+            animation: float 3s ease-in-out forwards;
+        }
+
+        .heart {
+            animation: float 3s ease-in-out forwards;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .stage-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 0.9rem;
+            text-align: center;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Hiệu ứng lấp lánh */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 1s ease-out forwards;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+
+
+
+        /* Tối ưu cho mobile */
+        @media (max-width: 480px) {
+            .letter-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .letter-content p {
+                font-size: 0.95rem;
+            }
+
+            .envelope-top {
+                border-left-width: calc(45vw - 15px);
+                border-right-width: calc(45vw - 15px);
+                border-bottom-width: 120px;
+            }
+
+
+
+        }
+
+        .open .flap {
+            transform: rotateX(180deg);
+            transition: transform 0.4s ease, z-index 0.6s;
+            z-index: 1;
+        }
+
+        .close .flap {
+            transform: rotateX(0deg);
+            transition: transform 0.4s 0.6s ease, z-index 1s;
+            z-index: 5;
+        }
+
+        .close .letter {
+            transform: translateY(0px);
+            transition: transform 0.4s ease, z-index 1s;
+            z-index: 1;
+        }
+
+        .open .letter {
+            transform: translateY(calc(-1 * (var(--env-height) / 3)));
+            transition: transform 0.4s 0.6s ease, z-index 0.6s;
+            z-index: 2;
+        }
+
+        .open .pocket2 {
+            transform: translateY(0%) rotateX(180deg);
+        }
+
+        .front {
+            position: absolute;
+            width: 0;
+            height: 0;
+            z-index: 3;
+        }
+
+        .flap {
+            border-left: calc(var(--env-width) / 2) solid transparent;
+            border-right: calc(var(--env-width) / 2) solid transparent;
+            border-bottom: calc((var(--env-height) / 2) - 8) solid transparent;
+            border-top: calc((var(--env-height) / 2) + 8) solid var(--color-flap);
+            transform-origin: top;
+            pointer-events: none;
+        }
+
+        .pocket {
+            border-left: calc(var(--env-width) / 2) solid var(--color-env);
+            border-right: calc(var(--env-width) / 2) solid var(--color-env);
+            border-bottom: calc(var(--env-height) / 2) solid var(--color-env2);
+            border-top: calc(var(--env-height) / 2) solid transparent;
+            border-bottom-left-radius: var(--env-border-radius);
+            border-bottom-right-radius: var(--env-border-radius);
+            z-index: 40;
+        }
+
+        .pocket2 {
+            position: absolute;
+            border-left: calc(var(--env-width) / 2) solid transparent;
+            border-right: calc(var(--env-width) / 2) solid transparent;
+            border-bottom: calc(var(--env-height) / 2) solid transparent;
+            border-top: calc(var(--env-height) / 2) solid var(--color-env2);
+            border-bottom-left-radius: var(--env-border-radius);
+            border-bottom-right-radius: var(--env-border-radius);
+            transform-origin: top;
+            transform: translateY(0%) rotateX(0deg);
+            transition: transform 0.8s ease, z-index 0.6s;
+            z-index: 2;
+        }
+
+        .hearts {
+            position: absolute;
+            top: calc(var(--env-height) / 2);
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: 0;
+            right: 10%;
+            pointer-events: none;
+        }
+
+        .heart:before,
+        .heart:after {
+            position: absolute;
+            content: "";
+            left: var(--heart-width);
+            top: 0;
+            width: var(--heart-width);
+            height: calc(var(--heart-width) * 1.6);
+            background: var(--color-heart);
+            border-radius: var(--heart-width) var(--heart-width) 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+            pointer-events: none;
+        }
+
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .close .heart {
+            opacity: 0;
+            animation: none;
+        }
+
+        .a1 {
+            left: 20%;
+            transform: scale(0.6);
+            opacity: 1;
+            animation: slideUp 4s linear 1, sideSway 2s ease-in-out 4 alternate;
+            animation-fill-mode: forwards;
+            animation-delay: 0.7s;
+        }
+
+        .a2 {
+            left: 55%;
+            transform: scale(1);
+            opacity: 1;
+            animation: slideUp 5s linear 1, sideSway 4s ease-in-out 2 alternate;
+            animation-fill-mode: forwards;
+            animation-delay: 0.7s;
+        }
+
+        .a3 {
+            left: 10%;
+            transform: scale(0.8);
+            opacity: 1;
+            animation: slideUp 7s linear 1, sideSway 2s ease-in-out 6 alternate;
+            animation-fill-mode: forwards;
+            animation-delay: 0.7s;
+        }
+
+        @keyframes slideUp {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: -600px;
+            }
+        }
+
+        @keyframes sideSway {
+            0% {
+                margin-left: 0px;
+            }
+
+            100% {
+                margin-left: 50px;
+            }
+        }
+    /* .cloud-image-dh {
+        
+        height: 100vh;
+        width: 100%;
+        top: 20px;
+        left: 20px;
+        z-index: 1;
+    } */
+    .anh1 {
+        width: 200px;
+    display: block;
+    }
+    .anh2 {
+        width: 200px;
+    display: block;
+    }
+    .cloud-image-tn {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+    .anh3 {
+        position: absolute;
+        bottom: 0;
+        left: -5%;
+        width: 600px; 
+        animation: floatCloud3 5s linear infinite;
+        z-index: 2;
+    }
+    @keyframes floatCloud3 {
+    0%   { transform: translateX(0px); }
+    50%  { transform: translateX(20px); }
+    100% { transform: translateX(0px); }
+}
+    .anh4 {
+        position: fixed;
+        bottom: -5%;
+        left: 20%;
+        width: 950px;
+        animation: floatCloud4 5s linear infinite;
+        z-index: 1;
+    }
+    @keyframes floatCloud4 {
+    0%   { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+    .anh5 {
+        position: fixed;
+        bottom: 0;
+        right: -5%;
+        width: 700px;
+        z-index: 2;
+        animation: floatCloud5 5s linear infinite;
+    }
+     @keyframes floatCloud5 {
+    0%   { transform: translateX(0px); }
+    50%  { transform: translateX(-20px); }
+    100% { transform: translateX(0px); }
+}
+
+#Cloud-Card1 {
+    width: 200px;
+    position: fixed;
+    left: 20%;          /* Bên trái */
+    top: 0;
+    transform: translateX(-50%);
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Cloud-Card2 {
+    width: 200px;
+    position: fixed;
+    left: 80%;          /* Bên phải, đối xứng với Card1 */
+    top: 0;
+    transform: translateX(-50%);
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#soiday1, #soiday2 {
+    position: relative;  /* Đổi từ absolute sang relative */
+    width: 200px;
+    height: 30px;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#ngiu-card1, #ngiu-card2 {
+    position: absolute;
+    z-index: 2;
+    cursor: grab;
+    user-select: none;
+    pointer-events: auto;
+}
