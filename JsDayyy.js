@@ -5,6 +5,34 @@ const stageIndicator = document.getElementById("stageIndicator");
 const envelope = document.getElementById("envelope");
 const bgAnimation = document.getElementById("bgAnimation");
 
+const backButton = document.getElementById("backButton");
+
+backButton.addEventListener("click", function (e) {
+  e.stopPropagation();
+
+  // Reset lại tất cả trạng thái và hiệu ứng
+  gsap.set(letter, { clearProps: "all" });
+
+  // 1️⃣ Đưa thư về lại phong bì
+  envelope.appendChild(letter);
+
+  // 2️⃣ Xoá trạng thái full
+  letter.classList.remove("full");
+
+  // 3️⃣ Đóng phong bì
+  envelope.classList.remove("open");
+  envelope.classList.add("close");
+
+  // 4️⃣ Reset stage
+  stage = 0;
+
+  // 5️⃣ Ẩn nút back
+  backButton.style.display = "none";
+  // 6️⃣ Hiện chỉ dẫn ban đầu
+  stageIndicator.style.display = "block";
+  stageIndicator.textContent = "Nhấn vào lá thư để mở...";
+  gsap.to(stageIndicator, { opacity: 1, duration: 0.5 });
+});
 function createFallingPetals() {
   const petals = ["🌸", "🌺", "🌼", "💮", "🏵️"]; // 5 loại hoa
 
@@ -205,6 +233,7 @@ envelopeWrapper.addEventListener("click", function (e) {
     document.body.appendChild(letter);
 
     letter.classList.add("full");
+    backButton.style.display = "block";
     createParticles("heart", 12);
     createSparkles(
       e.clientX || window.innerWidth / 2,
@@ -250,16 +279,6 @@ envelopeWrapper.addEventListener("click", function (e) {
 
     stage = 2;
   }
-  // } else if (stage === 2) {
-  //     envelope.classList.remove('open');
-  //     envelope.classList.add('close');
-  //     letter.classList.remove('full');
-  //     stageIndicator.style.display = 'block';
-  //     stageIndicator.textContent = 'Nhấn vào lá thư để mở...';
-  //     gsap.to(stageIndicator, { opacity: 1, duration: 0.5 });
-  //     stage = 0;
-
-  // }
 });
 
 // Tạo hiệu ứng hoa rơi ngẫu nhiên
@@ -285,112 +304,6 @@ function openEnvelope() {
   envelope.classList.add("open");
   envelope.classList.remove("close");
 }
-
-// // Danhoi
-// document.addEventListener("DOMContentLoaded", () => {
-//   const cloudcontainer1 = document.getElementById("Cloud-Card1");
-//   // const cloudcontainer2 = document.getElementById("Cloud-Card2");
-//   const lanyard1 = document.querySelector("#soiday1 line");
-//   // const lanyard2 = document.getElementById("soiday2 line");
-//   const ngiuCard1 = document.getElementById("ngiu-card1");
-//   // const ngiuCard2 = document.getElementById("ngiu-card2");
-
-//   // Dammay 1
-//   // các biến thể vật lí
-//   let isGiuThe1 = false;
-
-//   //Vị trí neo của sợi dây(phần đầu cố định ở trên cùng)
-//   const VitriX = cloudcontainer1.offsetWidth / 2;
-//   const VitriY = 0;
-
-//   // VỊ TRÍ NGHỈ: Đây là vị trí cân bằng mà thẻ sẽ luôn tìm cách quay về.
-//   // Thay đổi giá trị Y ở đây để thẻ treo cao hay thấp.
-//   const VitriNghiX = cloudcontainer1.offsetWidth / 2;
-//   const VitriNghiY = 150;
-
-//   //Vị trí ban đầu của thẻ được đặt bằng vị trí nghỉ
-//   let VitriBanDauX = VitriNghiX;
-//   let VitriBanDauY = VitriNghiY;
-
-//   //Vận tốc
-//   let vX = 0;
-//   let vY = 0;
-
-//   //Các hằng số vật lí
-//   const hangsoK = 0.03;
-//   const hesomasat = 0.92;
-//   const khoiluong = 5;
-
-//   //Sự kiện khi nhấn chuột xuống thẻ
-//   ngiuCard1.addEventListener("mousedown", (e) => {
-//     isGiuThe1 = true;
-//     ngiuCard1.style.transition = "none";
-//   });
-
-//   //Sự kiện khi thả chuột ra
-//   window.addEventListener("mouseup", () => {
-//     isGiuThe1 = false;
-//     animate();
-//   });
-
-//   //Sự kiện khi di chuyển chuột
-//   window.addEventListener("mousemove", (e) => {
-//     if (!isGiuThe1) return;
-//     const rect = cloudcontainer1.getBoundingClientRect();
-//     // getBoundingClientRect(); //lấy tọa độ container so với viewport.
-//     VitriBanDauX = e.clientX - rect.left;
-//     VitriBanDauY = e.clientY - rect.top;
-
-//     updateCursorPosition();
-//   });
-//   function updateCursorPosition() {
-//     // Cập nhật vị trí CSS của thẻ
-//     ngiuCard1.style.left = `${VitriBanDauX - ngiuCard1.offsetWidth / 2}px`;
-//     ngiuCard1.style.top = `${VitriBanDauY - 20}px`;
-
-//     //Cập nhật sợi dây: dây vẫn nối từ ĐIỂM NEO CỐ ĐỊNH ở trên cùng
-//     lanyard1.setAttribute("x1", VitriX);
-//     lanyard1.setAttribute("y1", VitriY);
-//     lanyard1.setAttribute("x2", VitriBanDauX);
-//     lanyard1.setAttribute("y2", VitriBanDauY);
-//   }
-//   function animate() {
-//     if (isGiuThe1) return;
-//     // Tính toán dựa trên khoảng cách tới vị trí nghỉ
-
-//     const dx = VitriBanDauX - VitriNghiX;
-//     const dy = VitriBanDauY - VitriNghiY;
-
-//     const LucX = -hangsoK * dx;
-//     const LucY = -hangsoK * dy;
-
-//     const giatocX = LucX / khoiluong;
-//     const giatocY = LucY / khoiluong;
-
-//     vX += giatocX;
-//     vY += giatocY;
-
-//     vX *= hesomasat;
-//     vY *= hesomasat;
-
-//     VitriBanDauX += vX;
-//     VitriBanDauY += vY;
-
-//     updateCursorPosition();
-
-//     if (
-//       Math.abs(vX) < 0.1 &&
-//       Math.abs(vY) < 0.1 &&
-//       Math.abs(dx) < 0.1 &&
-//       Math.abs(dy) < 0.1
-//     ) {
-//       return;
-//     }
-//     requestAnimationFrame(animate);
-//   }
-//   //Khởi tạo vị trí ban đầu
-//   updateCursorPosition();
-// });
 
 // Đàn hồi mây 1
 document.addEventListener("DOMContentLoaded", () => {
@@ -601,40 +514,67 @@ document.addEventListener("DOMContentLoaded", () => {
 // Hiệu ứng GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.fromTo(
-  ".cloud-image-tn .anh3",
-  { y: -1000, x: -100, opacity: 0 },
-  {
-    x: 0,
-    y: 0,
-    opacity: 1,
-    duration: 2,
-    ease: "power2.out",
-  },
-);
-gsap.fromTo(
-  ".cloud-image-tn .anh4",
-  { x: 100000000000, opacity: 0 },
-  {
-    x: 0,
-    opacity: 1,
-    duration: 2,
-    delay: 1,
-    ease: "power2.out",
-  },
-);
-gsap.fromTo(
-  ".cloud-image-tn .anh5",
-  { y: 1000, x: 100, opacity: 0 },
-  {
-    y: 0,
-    x: 0,
-    opacity: 1,
-    duration: 2,
-    delay: 0.5,
-    ease: "power2.out",
-  },
-);
+let tl1 = gsap.timeline();
+let tl2 = gsap.timeline();
+let tl3 = gsap.timeline();
+tl1
+  .fromTo(
+    ".cloud-image-tn .anh3",
+    { y: 600, x: -100 },
+    {
+      x: 0,
+      y: 0,
+      duration: 1,
+      ease: "expo.out",
+    },
+  )
+  // Sau khi bay xong thì lắc
+  .to(".cloud-image-tn .anh3", {
+    x: 5,
+    duration: 2.5,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+  });
+tl2
+  .fromTo(
+    ".cloud-image-tn .anh4",
+    { y: 600, x: 100 },
+    {
+      x: 0,
+      y: 0,
+      delay: 0.5,
+      duration: 1,
+      ease: "expo.out",
+    },
+  )
+  .to(".cloud-image-tn .anh4", {
+    y: 5,
+    duration: 2.5,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+  });
+tl3
+  .fromTo(
+    ".cloud-image-tn .anh5",
+    { y: 500, x: 100 },
+    {
+      y: 0,
+      x: 0,
+      duration: 2,
+      delay: 0.2,
+      ease: "expo.out",
+    },
+  )
+  .to(".cloud-image-tn .anh5", {
+    x: -5,
+    duration: 2.5,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+  });
+
 gsap.fromTo(
   "#Cloud-Card1",
   {
@@ -688,5 +628,21 @@ gsap.fromTo(
         ease: "sine.inOut",
       });
     },
+  },
+);
+gsap.fromTo(
+  "#nextButton",
+  { opacity: 0, y: 20 },
+  { opacity: 1, y: 0, duration: 1, delay: 2, ease: "power2.out" },
+);
+gsap.fromTo(
+  ".container",
+  { opacity: 0, y: -15 },
+  {
+    opacity: 1,
+    y: 0,
+    duration: 1,
+    delay: 2.5,
+    ease: "power2.out",
   },
 );
